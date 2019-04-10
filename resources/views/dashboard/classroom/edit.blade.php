@@ -37,7 +37,7 @@
                             </div>
 
                             <div class="form-group">
-                                <a href="{{ route('classroom.index') }}" class="btn btn-danger btn-sm">Cancel</a>
+                                <a href="{{ route('classroom.show', $classroom) }}" class="btn btn-danger btn-sm">Cancel</a>
                                 <button type="submit" class="btn btn-primary btn-sm float-right">Submit</button>
                             </div>
                         </form>
