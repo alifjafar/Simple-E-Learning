@@ -55,7 +55,7 @@ class User extends Authenticatable
     {
         $avatar = $this['picture'];
         if ($avatar) {
-            return Storage::disk('upload')->url($avatar);
+            return Storage::disk('public')->url($avatar);
         }
         $hash = md5(strtolower(trim($this['email']))) . '.jpeg' . '?s=106&d=mm&r=g';
         return "https://secure.gravatar.com/avatar/$hash";

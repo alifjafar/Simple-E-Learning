@@ -52,6 +52,8 @@
                                 <label for="lecturer" class="custom-control-label">Saya Dosen</label></div>
                         </div>
                         <input type="submit" class="btn btn-primary btn-lg btn-block" value="Register">
+                        <div class="modal-footer bg-transparent "><p class="text-sm">Sudah punya akun? </p><a
+                                href="{{ route('login') }}"><p class="text-sm">Login Sekarang</p></a></div>
                     </form>
                 </div>
             </div>

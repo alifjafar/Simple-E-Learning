@@ -3,10 +3,22 @@
 @section('content')
     <header class="white b-b p-3">
         <div class="container-fluid">
-            <h3>
-                {{ $classroom['name'] }}
-            </h3>
-            Dosen : <strong>{{ $classroom['lecturer']['name'] }}</strong>
+            <div class="row">
+                <div class="col-md-9">
+                    <h3>
+                        {{ $classroom['name'] }}
+                    </h3>
+                    Dosen : <strong>{{ $classroom['lecturer']['name'] }}</strong>
+                </div>
+                @can('dosen')
+                    <div class="col-md-3">
+                    <span class="float-right">
+                        <a href="{{ route('classroom.edit', $classroom) }}" class="btn btn-primary btn-sm"><i
+                                class="icon icon-edit"></i> Edit Kelas</a>
+                    </span>
+                    </div>
+                @endcan
+            </div>
         </div>
     </header>
     <div class="container-fluid my-3">
@@ -46,6 +58,9 @@
                                             <th>Materi</th>
                                             <th>Deskripsi</th>
                                             <th>File</th>
+                                            @can('dosen')
+                                                <th width="8%">Aksi</th>
+                                            @endcan
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -59,6 +74,12 @@
                                                        class="btn btn-success btn-sm"><i
                                                             class="icon icon-angle-down"></i> Download</a>
                                                 </td>
+                                                @can('dosen')
+                                                    <td><a href="#"
+                                                           onclick="deleteCourse('{{$course['id']}}', '{{ $course['title'] }}')"
+                                                           class="btn btn-danger btn-sm" title="Hapus"><i
+                                                                class="icon-trash"></i></a></td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -69,43 +90,74 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card shadow no-b">
-                    <div class="card-header bg-white">
-                        <span class="card-title"><strong>Siswa</strong></span>
-                    </div>
-                    <div class="card-body">
-                        @foreach($classroom->students->take(5) as $student)
-                            <div class="mb-3">
-                                <div class="image mr-3 avatar-sm float-left">
-                                    <img src="{{ $student['avatar'] }}" style="border-radius: 50%"
-                                         alt="User Image">
+            @can('dosen')
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <div class="card shadow no-b">
+                                <div class="card-header bg-white">
+                                    <span class="card-title"><strong>Siswa</strong></span>
+                                    <span class="float-right">
+                            <a href="{{ route('classroom.student', $classroom) }}">Lihat Semua</a>
+                        </span>
                                 </div>
-                                <div class="mt-1">
-                                    <div>
-                                        <strong>{{ $student['name'] }}</strong>
-                                    </div>
+                                <div class="card-body">
+                                    @forelse($classroom->students->take(5) as $student)
+                                        <div class="mb-3">
+                                            <div class="image mr-3 avatar-sm float-left">
+                                                <img src="{{ $student['avatar'] }}" style="border-radius: 50%"
+                                                     alt="User Image">
+                                            </div>
+                                            <div class="mt-1">
+                                                <div>
+                                                    <strong>{{ $student['name'] }}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="card light no-b">
+                                            <div class="card-body text-center">
+                                                <span>Belum ada siswa, Invite Sekarang !</span>
+                                            </div>
+                                        </div>
+                                    @endforelse
+                                    <hr>
+                                    @can('dosen')
+                                        @if(session()->has('error'))
+                                            <div class="alert alert-danger">
+                                                {{ session()->get('error') }}
+                                            </div>
+                                        @endif
+                                        <form action="{{ route('students.invite') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="classroom_id" value="{{ $classroom['id'] }}">
+                                            <div class="form-group">
+                                                <label for="student">Invite Siswa</label>
+                                                <select name="students[]" id="student" class="form-control"
+                                                        multiple></select>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary btn-sm">Invite</button>
+                                            </div>
+                                        </form>
+                                    @endcan
                                 </div>
                             </div>
-                        @endforeach
-                        <hr>
-                        @can('dosen')
-                            <form action="{{ route('students.invite') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="classroom_id" value="{{ $classroom['id'] }}">
-                                <div class="form-group">
-                                    <label for="student">Invite Siswa</label>
-                                    <select name="students[]" id="student" class="form-control"
-                                            multiple></select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card shadow no-b">
+                                <div class="card-body">
+                                    <a href="#"
+                                       onclick="deleteClassroom('{{ $classroom['id'] }}', '{{ $classroom['name'] }}')"
+                                       class="btn btn-sm btn-danger btn-block"><i class="icon icon-trash"></i>
+                                        Hapus Kelas Ini</a>
                                 </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-sm">Invite</button>
-                                </div>
-                            </form>
-                        @endcan
+                            </div>
+                        </div>
                     </div>
+
                 </div>
-            </div>
+            @endcan
         </div>
     </div>
 
@@ -164,6 +216,10 @@
         @if(session()->has('success'))
         swal("Berhasil !", '{{ session()->get('success') }}', "success");
         @endif
+
+        @if(session()->has('showModel'))
+        $('#add_materi').modal('show');
+        @endif
     </script>
 
     <script>
@@ -199,13 +255,19 @@
         $('#student').select2({
             ajax: {
                 url: '{{ route('students.ajax') }}',
-                data: {classroom_id: '{{ $classroom['id'] }}'},
+                data: function (params) {
+                    return {
+                        q: params.term,
+                        classroom_id: '{{ $classroom['id'] }}'
+
+                    }
+                },
                 processResults: function (data) {
                     return {
                         results: data.data.map(function (item) {
                             return {
                                 id: item.id,
-                                text: item.name
+                                text: item.name + " (" + item.email + ")"
                             }
                         })
                     }
@@ -213,5 +275,62 @@
             },
             cache: true
         });
+
+        @can('dosen')
+
+        function deleteClassroom(classroomId, classroomName) {
+            swal({
+                title: "Apa anda yakin?",
+                text: "Anda Menghapus Kelas " + classroomName,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete => {
+                if (willDelete) {
+                    let theUrl = "{{ route('classroom.destroy', ':classroomId') }}";
+                    theUrl = theUrl.replace(":classroomId", classroomId);
+                    $.ajax({
+                        type: 'POST',
+                        url: theUrl,
+                        data: {_method: "delete"},
+                        success: function (data) {
+                            window.location.href = data;
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                        }
+                    });
+                }
+            }));
+        }
+
+        function deleteCourse(courseId, courseTitle) {
+            swal({
+                title: "Apa anda yakin?",
+                text: "Anda Menghapus Materi " + courseTitle,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete => {
+                if (willDelete) {
+                    let theUrl = "{{ route('course.destroy', ':courseId') }}";
+                    theUrl = theUrl.replace(":courseId", courseId);
+                    $.ajax({
+                        type: 'POST',
+                        url: theUrl,
+                        data: {_method: "delete"},
+                        success: function (data) {
+                            window.location.href = data;
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                        }
+                    });
+                }
+            }));
+        }
+        @endcan
     </script>
 @endpush

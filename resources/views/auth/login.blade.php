@@ -5,9 +5,11 @@
             <div class="row">
                 <div class="col-lg-4 mx-md-auto">
                     <div class="text-center">
-                        <img src="{{ asset('img/icon/sydney-opera-house.png') }}" class="img-fluid" style="max-width: 150px"
+                        <img src="{{ asset('img/icon/sydney-opera-house.png') }}" class="img-fluid"
+                             style="max-width: 150px"
                              alt="Logo">
-                        <p class="p-t-b-20">Silahkan Login Untuk Melanjutkan</p>
+                        <h1>E-Learning</h1>
+                        <p class="pt-2 pb-2">Silahkan Login Untuk Melanjutkan</p>
                     </div>
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
@@ -30,6 +32,8 @@
                         </div>
                         <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login">
                     </form>
+                    <div class="modal-footer bg-transparent "><p class="text-sm">Belum punya akun? </p><a
+                            href="{{ route('register') }}"><p class="text-sm">Daftar Sekarang</p></a></div>
                 </div>
             </div>
         </div>

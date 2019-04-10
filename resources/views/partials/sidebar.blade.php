@@ -26,11 +26,11 @@
                 <div class="clearfix"></div>
                 <div class="multi-collapse collapse" id="userSettingsCollapse" style="">
                     <div class="list-group mt-3 shadow">
-                        <a href="#"
+                        <a href="{{ route('profile', $user->username) }}"
                            class="list-group-item list-group-item-action">
                             <i class="mr-2 icon-umbrella text-blue"></i>Profile
                         </a>
-                        <a href="#"
+                        <a href="{{ route('edit-password', $user->username) }}"
                            class="list-group-item list-group-item-action"><i class="mr-2 icon-security text-purple"></i>Change
                             Password</a>
                     </div>
@@ -42,15 +42,15 @@
                     <i class="icon icon-dashboard2 s-18 text-yellow"></i>Dashboard
                 </a>
             </li>
-            <li class="{{ setActive('classroom.index') }}"><a href="{{ route('classroom.index') }}"><i class="icon icon-room_service s-18 text-purple"></i>Classroom</a></li>
-            {{--<li class="{{ setActive('posts.index') }}"><a href="{{ route('posts.index') }}"><i--}}
-            {{--class="icon icon-document-list s-18 brown-text"></i>Posts</a></li>--}}
+            <li class="{{ setActive(['classroom.index', 'classroom.student', 'classroom.create','classroom.edit', 'classroom.show']) }}">
+                <a href="{{ route('classroom.index') }}"><i class="icon icon-room_service s-18 text-purple"></i>Classroom</a>
+            </li>
             @can('admin')
                 <li class="header">
                     <strong>Super Admin</strong>
                 </li>
-                <li class=""><a href=""><i
-                            class="icon icon-user-o s-18 text-blue"></i>Users</a></li>
+                <li class="{{ setActive('users.index') }}"><a href="{{ route('users.index') }}"><i
+                            class="icon icon-account_circle s-18 text-green"></i>Users</a></li>
             @endcan
             <li class="header">
                 <strong>Akun</strong>

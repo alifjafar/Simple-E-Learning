@@ -10,28 +10,28 @@
                     <div class="col-lg-3">
                         <div class="green counter-box p-40">
                             <div class="float-right">
-                                <span class="icon icon-document-list s-48"></span>
+                                <span class="icon icon-box-filled2 s-48"></span>
                             </div>
-                            <div class="sc-counter s-36">5</div>
-                            <h6 class="counter-title">Jumlah Post</h6>
+                            <div class="sc-counter s-36">{{ $dashboard['classroom'] }}</div>
+                            <h6 class="counter-title">Jumlah Kelas</h6>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="blue1 counter-box p-40">
                             <div class="float-right">
-                                <span class="icon icon-announcement s-48"></span>
+                                <span class="icon icon-subject s-48"></span>
                             </div>
-                            <div class="sc-counter s-36">5</div>
-                            <h6 class="counter-title">Jumlah Pengumuman</h6>
+                            <div class="sc-counter s-36">{{ $dashboard['course'] }}</div>
+                            <h6 class="counter-title">Jumlah Materi</h6>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="sunfollower counter-box p-40">
                             <div class="float-right">
-                                <span class="icon icon-target-12 s-48"></span>
+                                <span class="icon icon-user s-48"></span>
                             </div>
-                            <div class="sc-counter s-36">5</div>
-                            <h6 class="counter-title">Jumlah Page</h6>
+                            <div class="sc-counter s-36">{{ $dashboard['lecturer'] }}</div>
+                            <h6 class="counter-title">Jumlah Dosen</h6>
                         </div>
                     </div>
                     <div class="col-lg-3">
@@ -39,8 +39,8 @@
                             <div class="float-right">
                                 <span class="icon icon-user s-48"></span>
                             </div>
-                            <div class="sc-counter s-36">5</div>
-                            <h6 class="counter-title">Jumlah Akun Pengguna</h6>
+                            <div class="sc-counter s-36">{{ $dashboard['student'] }}</div>
+                            <h6 class="counter-title">Jumlah Mahasiswa</h6>
                         </div>
                     </div>
                 </div>
