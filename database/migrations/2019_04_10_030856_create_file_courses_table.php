@@ -16,7 +16,7 @@ class CreateFileCoursesTable extends Migration
         Schema::create('file_courses', function (Blueprint $table) {
             $table->unsignedBigInteger('file_id');
             $table->unsignedBigInteger('course_id');
-            $table->primary(['classroom_id', 'course_id']);
+            $table->primary(['file_id', 'course_id']);
             $table->foreign('file_id')->references('id')->on('files')->onDelete('cascade');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
