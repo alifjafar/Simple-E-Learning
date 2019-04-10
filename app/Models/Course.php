@@ -14,4 +14,10 @@ class Course extends Model
     {
         return $this->belongsTo(Classroom::class, 'classroom_id');
     }
+
+    public function files()
+    {
+        return $this->belongsToMany(File::class, 'file_courses',
+            'course_id','file_id');
+    }
 }

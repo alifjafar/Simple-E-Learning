@@ -6,7 +6,7 @@
                 <div class="col-lg-4 mx-md-auto">
                     <div class="text-center">
                         <img src="{{ asset('img/icon/sydney-opera-house.png') }}" class="img-fluid" style="max-width: 150px"
-                             alt="Logo SMAN 1 Ngamprah">
+                             alt="Logo">
                         <p class="p-t-b-20">Silahkan Login Untuk Melanjutkan</p>
                     </div>
                     <form action="{{ route('login') }}" method="POST">

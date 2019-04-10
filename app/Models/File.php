@@ -3,16 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
     protected $fillable = [
-        'filename', 'path', 'size', 'mime'
+        'id', 'filename', 'path', 'size', 'mime'
     ];
+
+    public $incrementing = false;
 
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'file_courses',
-            'course_id', 'file_id');
+            'file_id', 'course_id');
     }
+
 }

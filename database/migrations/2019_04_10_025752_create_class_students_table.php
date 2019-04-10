@@ -14,7 +14,7 @@ class CreateClassStudentsTable extends Migration
     public function up()
     {
         Schema::create('class_students', function (Blueprint $table) {
-            $table->unsignedBigInteger('classroom_id');
+            $table->char('classroom_id',32);
             $table->unsignedBigInteger('user_id');
             $table->primary(['classroom_id', 'user_id']);
             $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');

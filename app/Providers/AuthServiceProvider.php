@@ -29,11 +29,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             if ($user instanceof User) {
                 if ($user['role'] == 'admin') {
-                    return $user['role'] == $ability;
+                    return true;
                 } elseif ($user['role'] == 'dosen') {
-                    return $user['role'] == $ability;
+                    if ($user['role'] == $ability)
+                        return true;
+                    return false;
                 } else {
-                    return $user['role'] == $ability;
+                    return false;
                 }
             } else {
                 return false;

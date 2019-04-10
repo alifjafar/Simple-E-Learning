@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Classroom extends Model
 {
     protected $fillable = [
-        'name', 'description', 'user_id'
+        'id', 'name', 'description', 'user_id'
     ];
+
+    public $incrementing = false;
 
     public function lecturer()
     {
@@ -17,7 +19,12 @@ class Classroom extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class,'class_students',
-            'classroom_id','user_id');
+        return $this->belongsToMany(User::class, 'class_students',
+            'classroom_id', 'user_id');
+    }
+
+    public function course()
+    {
+        return $this->hasMany(Course::class, 'classroom_id');
     }
 }

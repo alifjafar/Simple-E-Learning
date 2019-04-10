@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -28,6 +29,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $appends = ['avatar'];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -39,14 +42,25 @@ class User extends Authenticatable
 
     public function lecturerClass()
     {
-        $this->hasMany(Classroom::class, 'user_id');
+        return $this->hasMany(Classroom::class, 'user_id');
     }
 
     public function studentClass()
     {
-        $this->belongsToMany(Classroom::class, 'class_students',
+        return $this->belongsToMany(Classroom::class, 'class_students',
             'user_id', 'classroom_id');
     }
+
+    public function getAvatarAttribute()
+    {
+        $avatar = $this['picture'];
+        if ($avatar) {
+            return Storage::disk('upload')->url($avatar);
+        }
+        $hash = md5(strtolower(trim($this['email']))) . '.jpeg' . '?s=106&d=mm&r=g';
+        return "https://secure.gravatar.com/avatar/$hash";
+    }
+
 
 
 }

@@ -14,7 +14,7 @@ class CreateClassroomsTable extends Migration
     public function up()
     {
         Schema::create('classrooms', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->char('id',32)->primary();
             $table->string('name');
             $table->longText('description')->nullable();
             $table->unsignedBigInteger('user_id');

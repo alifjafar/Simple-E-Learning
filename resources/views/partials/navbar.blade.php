@@ -13,7 +13,6 @@
         <!--Top Menu Start -->
         <div class="navbar-custom-menu p-t-10">
             <ul class="nav navbar-nav">
-                <li><a href="/" target="_blank" class="btn btn-primary btn-sm"><i class="icon icon-paper-plane"></i> Halaman Depan </a></li>
             </ul>
         </div>
     </div>
