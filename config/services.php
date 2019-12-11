@@ -35,13 +35,19 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => \App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
         'webhook' => [
             'secret' => env('STRIPE_WEBHOOK_SECRET'),
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
+    ],
+
+    'google' => [
+        'client_id' => '449743998264-9hkpnp4hooi80ttq3ngmjo84bo5h2u9v.apps.googleusercontent.com',
+        'client_secret' => 'OHY1_1oZdMaxdUYQWpBZ8IdM',
+        'redirect' => 'http://localhost:8000/auth/google/callback',
     ],
 
 ];

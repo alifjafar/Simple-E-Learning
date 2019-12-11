@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClassroomsTable extends Migration
+class CreateQuizzesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateClassroomsTable extends Migration
      */
     public function up()
     {
-        Schema::create('classrooms', function (Blueprint $table) {
+        Schema::create('quizzes', function (Blueprint $table) {
             $table->char('id',32)->primary();
-            $table->string('name');
             $table->longText('description')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('enroll_code')->nullable();
-            $table->boolean('is_private')->default(false);
+            $table->char('classroom_id', 32);
+            $table->foreign('classroom_id')->references('id')->on('classrooms');
+            $table->string('quiz_provider_id')->index();
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ class CreateClassroomsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('classrooms');
+        Schema::dropIfExists('quizzes');
     }
 }

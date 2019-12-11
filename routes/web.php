@@ -47,3 +47,6 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('auth/google', 'Auth\GoogleController@redirectToProvider')->name('register.google');
+Route::get('auth/google/callback', 'Auth\GoogleController@handleProviderCallback');

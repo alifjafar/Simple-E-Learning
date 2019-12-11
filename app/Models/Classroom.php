@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Classroom extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
-        'id', 'name', 'description', 'user_id'
+        'id', 'name', 'description', 'user_id', 'enroll_code', 'is_private'
     ];
 
     public $incrementing = false;
