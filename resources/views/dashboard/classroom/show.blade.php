@@ -23,6 +23,17 @@
     </header>
     <div class="container-fluid my-3">
         <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="card shadow no-b">
+                    <div class="card-body">
+                        <strong>
+                            <span id="intermezzo">Loading Intermezzo...</span> - <span id="year"></span>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-8 mb-4">
                 <div class="row mb-4">
                     <div class="col-md-12">
@@ -31,12 +42,12 @@
                                 <span class="card-title"><strong>Deskripsi</strong></span>
                             </div>
                             <div class="card-body">
-                                {!! $classroom['description'] !!}
+                                {{ strip_tags($classroom['description']) }}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col-md-12">
                         <div class="card shadow no-b">
                             <div class="card-header bg-white">
@@ -80,6 +91,58 @@
                                                            class="btn btn-danger btn-sm" title="Hapus"><i
                                                                 class="icon-trash"></i></a></td>
                                                 @endcan
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow no-b">
+                            <div class="card-header bg-white">
+                                <strong>List Quiz</strong>
+                                @can('dosen')
+                                    <span class="float-right">
+                                    <a href="{{ route('quiz.create', $classroom) }}"
+                                       class="btn btn-outline-primary btn-sm"><i
+                                            class="icon icon-tasks"></i> Buat Quiz</a>
+                                </span>
+                                @endcan
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover dataTable">
+                                        <thead>
+                                        <tr>
+                                            <th width="8%">No</th>
+                                            <th>Quiz</th>
+                                            <th>Deskripsi</th>
+                                            <th>Waktu</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($classroom['quizzes'] as $quiz)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $quiz['name'] }}</td>
+                                                <td>{{ strip_tags($quiz['description']) }}</td>
+                                                <td>{{ $quiz['start_date']->format('d M Y, H:i')}}
+                                                    - {{ $quiz['end_date']->format('d M Y, H:i') }}</td>
+                                                <td>
+                                                    @can('dosen')
+                                                        <a href="{{ route('quiz.edit', ['classroom' => $classroom, 'quiz' => $quiz]) }}"
+                                                           class="btn btn-success btn-xs">Edit</a>
+                                                    @else
+                                                        <button type="button" onclick="takeQuiz('{{$quiz['id']}}')"
+                                                                class="btn btn-primary btn-xs">Kerjakan Quiz
+                                                        </button>
+                                                    @endcan
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -210,6 +273,7 @@
 
         @endcomponent
     @endcan
+
 @endsection
 @push('js')
     <script>
@@ -223,7 +287,7 @@
     </script>
 
     <script>
-        $('#data-table').DataTable({
+        $('.dataTable').DataTable({
             "columnDefs": [{
                 "orderable": false
             }],
@@ -243,6 +307,19 @@
             }
         });
 
+    </script>
+
+    <script>
+        $.ajax({
+            url: '{{ route('resource.intermezzo') }}',
+            success: function (res) {
+                $('#intermezzo').text(res.data.text);
+                $('#year').text(`(${res.data.year})`);
+            },
+            error: function (res) {
+                console.log(res);
+            }
+        })
     </script>
 
     <script>
@@ -331,6 +408,53 @@
                 }
             }));
         }
+
         @endcan
+
+        @cannot('dosen')
+        function takeQuiz(id) {
+            swal({
+                text: 'Masukan Password Quiz',
+                content: {
+                    element: "input",
+                    attributes: {
+                        type: "password",
+                    },
+                },
+                button: {
+                    text: "Submit",
+                    closeModal: false,
+                },
+            })
+                .then(password => {
+                    if (!password) throw null;
+
+                    let theUrl = "{{ route('quiz.take', ':quizId') }}";
+                    theUrl = theUrl.replace(":quizId", id);
+                    return $.ajax({
+                        type: 'POST',
+                        url: theUrl,
+                        data: {
+                            password: password
+                        }
+                    })
+                })
+                .then(json => {
+                    if (json.url) {
+                        return window.location.href = json.url;
+                    } else {
+                        return swal("Oops!", json.message, "error");
+                    }
+                })
+                .catch(err => {
+                    if (err) {
+                        swal("Oh noes!", err.toString(), "error");
+                    } else {
+                        swal.stopLoading();
+                        swal.close();
+                    }
+                });
+        }
+        @endcannot
     </script>
 @endpush

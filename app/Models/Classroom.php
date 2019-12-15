@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Classroom extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
-        'id', 'name', 'description', 'user_id', 'enroll_code', 'is_private'
+        'id', 'name', 'description', 'user_id', 'enroll_code', 'is_private', 'is_private', 'enroll_code'
     ];
 
     public $incrementing = false;
@@ -29,5 +27,10 @@ class Classroom extends Model
     public function course()
     {
         return $this->hasMany(Course::class, 'classroom_id');
+    }
+
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
     }
 }

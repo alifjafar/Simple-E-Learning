@@ -21,6 +21,8 @@ class CreateClassroomsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('enroll_code')->nullable();
             $table->boolean('is_private')->default(false);
+            $table->string('enroll_code')->nullable();
+            $table->boolean('is_private')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -11,7 +11,7 @@ class Quiz extends Model
     use Uuid, SoftDeletes;
 
     protected $fillable = [
-        'description','classroom_id','quiz_provider_id','start_date','end_date'
+        'name', 'description', 'classroom_id', 'quiz_provider_id', 'start_date', 'end_date', 'password'
     ];
 
     protected $casts = [
@@ -22,6 +22,11 @@ class Quiz extends Model
     public function result()
     {
         return $this->hasOne(QuizResult::class);
+    }
+
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class);
     }
 
 }

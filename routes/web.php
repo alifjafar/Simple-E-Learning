@@ -23,6 +23,14 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController')->name('dashboard');
 
+    Route::post('classroom/quiz/add','QuizController@store')->name('quiz.store');
+    Route::get('classroom/quiz/{quiz}', 'QuizController@show')->name('quiz.show');
+    Route::post('classroom/quiz/{quiz}/submit', 'SubmitQuizController')->name('quiz.submit');
+    Route::put('classroom/quiz/{quiz}','QuizController@update')->name('quiz.update');
+    Route::get('classroom/{classroom}/quiz/create','QuizController@create')->name('quiz.create');
+    Route::get('classroom/{classroom}/quiz/{quiz}/edit','QuizController@edit')->name('quiz.edit');
+    Route::post('quiz/take/{quiz}', 'StudentTakeQuizController')->name('quiz.take');
+
     Route::get('classroom', 'ClassroomController@index')->name('classroom.index');
     Route::resource('classroom', 'ClassroomController')->except(['index']);
     Route::get('classroom/students/{classroom}', 'ClassroomController@showStudents')->name('classroom.student');
@@ -44,6 +52,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/edit/{user}', 'ProfileController@updateProfile')->name('update.profile');
         Route::put('/change_password/{user}', 'ProfileController@updatePassword')->name('update.password');
         Route::put('/{user}/update_foto', 'ProfileController@updateFoto')->name('update.foto');
+    });
+
+    Route::group(['namespace' => 'Resource','prefix' => 'resource'], function () {
+        Route::get('intermezzo', 'IntermezzoController')->name('resource.intermezzo');
     });
 });
 Route::get('/home', 'HomeController@index')->name('home');

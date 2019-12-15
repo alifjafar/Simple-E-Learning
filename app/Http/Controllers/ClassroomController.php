@@ -60,7 +60,7 @@ class ClassroomController extends Controller
     public function show(Classroom $classroom)
     {
         $classroom->load('course.files');
-        $classroom->load('students');
+        $classroom->load(['students','quizzes']);
         return view('dashboard.classroom.show', compact('classroom'));
     }
 

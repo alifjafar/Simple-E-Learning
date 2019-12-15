@@ -15,7 +15,9 @@ class CreateQuizzesTable extends Migration
     {
         Schema::create('quizzes', function (Blueprint $table) {
             $table->char('id',32)->primary();
+            $table->string('name');
             $table->longText('description')->nullable();
+            $table->string('password')->nullable();
             $table->char('classroom_id', 32);
             $table->foreign('classroom_id')->references('id')->on('classrooms');
             $table->string('quiz_provider_id')->index();
