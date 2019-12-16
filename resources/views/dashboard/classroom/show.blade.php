@@ -107,7 +107,7 @@
                                 <strong>List Quiz</strong>
                                 @can('dosen')
                                     <span class="float-right">
-                                         <a href="{{ route('quiz.create', $classroom) }}"
+                                         <a href="{{ route('classroom.quiz.result', $classroom) }}"
                                             class="btn btn-outline-danger btn-sm mr-2"><i
                                                  class="icon icon-history"></i> Hasil Quiz Siswa</a>
                                     <a href="{{ route('quiz.create', $classroom) }}"
