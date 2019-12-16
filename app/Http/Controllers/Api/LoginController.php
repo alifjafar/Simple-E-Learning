@@ -25,11 +25,11 @@ class LoginController extends Controller
             'api_token' => hash('sha256', Str::random(60))
         ]);
 
-        return [
+        return response()->json([
             'status' => 'success',
             'data' => [
                 'token' => $user['api_token']
             ]
-        ];
+        ]);
     }
 }
