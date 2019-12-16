@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login', 'LoginController');
+Route::post('login', 'Api\LoginController');
 Route::group(['middleware' => ['auth:api'], 'namespace' => 'Api'], function () {
     Route::get('quiz_history', 'QuizHistoryController');
 });
