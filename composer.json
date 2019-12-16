@@ -13,7 +13,8 @@
         "intervention/image": "^2.4",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "moontoast/math": "^1.1"
+        "moontoast/math": "^1.1",
+        "shivella/laravel-bitly": "^1.1"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

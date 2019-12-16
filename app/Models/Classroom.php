@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Classroom extends Model
 {
     protected $fillable = [
-        'id', 'name', 'description', 'user_id', 'enroll_code', 'is_private', 'is_private', 'enroll_code'
+        'id', 'name', 'description', 'user_id','is_private', 'enroll_code'
     ];
 
     public $incrementing = false;

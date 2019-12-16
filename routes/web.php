@@ -34,12 +34,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('classroom', 'ClassroomController@index')->name('classroom.index');
     Route::resource('classroom', 'ClassroomController')->except(['index']);
     Route::get('classroom/students/{classroom}', 'ClassroomController@showStudents')->name('classroom.student');
+    Route::get('classroom/quiz_result/{classroom}', 'ClassroomController@showQuizResult')->name('classroom.quiz.result');
     Route::delete('classroom/students/destroy/{classroomId}/{studentId}', 'ClassroomController@deleteStudent')->name('classroom.student.destroy');
     Route::get('student/classroom', 'StudentController@ajaxSearch')->name('students.ajax');
     Route::post('classroom/student/invite', 'ClassroomController@invite')->name('students.invite');
     Route::post('classroom/course/add', 'CourseController@store')->name('course.store');
     Route::delete('classroom/course/destroy/{course}', 'CourseController@destroy')->name('course.destroy');
     Route::get('classroom/course/download/{id}', 'FileController@download')->name('file.download');
+
+    Route::get('enroll/classroom/{classroom}', 'ClassroomController@enrollView')->name('enroll.view');
+    Route::post('enroll/classroom/{classroom}', 'ClassroomController@enroll')->name('enroll.classroom');
+
+
+    Route::group(['middleware' => ['can:mahasiswa']], function () {
+        Route::get('history_quiz', 'QuizHistoryController')->name('quiz.history');
+    });
 
     Route::group(['middleware' => ['can:admin']], function () {
         Route::resource('users', 'UserController');

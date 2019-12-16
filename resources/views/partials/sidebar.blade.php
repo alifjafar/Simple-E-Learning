@@ -45,6 +45,11 @@
             <li class="{{ setActive(['classroom.index', 'classroom.student', 'classroom.create','classroom.edit', 'classroom.show']) }}">
                 <a href="{{ route('classroom.index') }}"><i class="icon icon-room_service s-18 text-purple"></i>Classroom</a>
             </li>
+            @can('mahasiswa')
+                <li class="{{ setActive(['quiz.history']) }}">
+                    <a href="{{ route('quiz.history') }}"><i class="icon icon-history s-18 text-purple"></i>My Quiz Result</a>
+                </li>
+            @endcan
             @can('admin')
                 <li class="header">
                     <strong>Super Admin</strong>

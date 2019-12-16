@@ -37,6 +37,19 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="enroll">Enroll Code</label>
+                                <input type="text" name="enroll_code" id="enroll" class="form-control" value="{{ old('enroll_code', $classroom['enroll_code']) }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="status">Status Kelas</label>
+                                <select name="is_private" id="status" class="form-control">
+                                    <option value="1" {{ old('is_private', $classroom['is_private']) == '1' ? 'selected': ''}}>Private</option>
+                                    <option value="0" {{ old('is_private', $classroom['is_private']) == '0' ? 'selected': ''}}>Public</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
                                 <a href="{{ route('classroom.show', $classroom) }}" class="btn btn-danger btn-sm">Cancel</a>
                                 <button type="submit" class="btn btn-primary btn-sm float-right">Submit</button>
                             </div>

@@ -107,6 +107,9 @@
                                 <strong>List Quiz</strong>
                                 @can('dosen')
                                     <span class="float-right">
+                                         <a href="{{ route('quiz.create', $classroom) }}"
+                                            class="btn btn-outline-danger btn-sm mr-2"><i
+                                                 class="icon icon-history"></i> Hasil Quiz Siswa</a>
                                     <a href="{{ route('quiz.create', $classroom) }}"
                                        class="btn btn-outline-primary btn-sm"><i
                                             class="icon icon-tasks"></i> Buat Quiz</a>
@@ -156,6 +159,18 @@
             @can('dosen')
                 <div class="col-md-4">
                     <div class="row">
+                        @if($url)
+                            <div class="col-md-12 mb-4">
+                                <div class="card shadow no-b">
+                                    <div class="card-header bg-white">
+                                        <span class="card-title"><strong>Enroll URL Classroom</strong></span>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre>{{ $url }}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="col-md-12 mb-4">
                             <div class="card shadow no-b">
                                 <div class="card-header bg-white">

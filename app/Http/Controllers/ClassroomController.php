@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Classroom;
 use App\Models\ClassStudent;
-use App\Models\Course;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Shivella\Bitly\Facade\Bitly;
 
 class ClassroomController extends Controller
 {
@@ -47,7 +46,9 @@ class ClassroomController extends Controller
     {
         $validated = $this->validate($request, [
             'name' => 'required|string|max:191',
-            'description' => 'required'
+            'description' => 'required',
+            'enroll_code' => 'sometimes|nullable|string',
+            'is_private' => 'required'
         ]);
 
         $validated['id'] = Str::orderedUuid()->getHex();
@@ -59,16 +60,34 @@ class ClassroomController extends Controller
 
     public function show(Classroom $classroom)
     {
+
+        if (\auth()->user()->role == 'mahasiswa') {
+            $class = ClassStudent::where('user_id', \auth()->id())->where('classroom_id', $classroom['id'])->first();
+
+            if (!$class) {
+                return redirect()->route('classroom.index');
+            }
+        }
+
+
         $classroom->load('course.files');
-        $classroom->load(['students','quizzes']);
-        return view('dashboard.classroom.show', compact('classroom'));
+        $classroom->load(['students', 'quizzes']);
+
+        $url = null;
+
+        if ($classroom['enroll_code']) {
+            $url = Bitly::getUrl(route('enroll.view', $classroom));
+        }
+        return view('dashboard.classroom.show', compact('classroom', 'url'));
     }
 
     public function update(Request $request, Classroom $classroom)
     {
         $validated = $this->validate($request, [
             'name' => 'required|string|max:191',
-            'description' => 'required'
+            'description' => 'required',
+            'enroll_code' => 'sometimes|nullable|string',
+            'is_private' => 'required'
         ]);
 
         $classroom->update($validated);
@@ -80,6 +99,13 @@ class ClassroomController extends Controller
     {
         $classroom->load('students');
         return view('dashboard.classroom.student', compact('classroom'));
+    }
+
+    public function showQuizResult(Classroom $classroom)
+    {
+        $classroom->load('quizzes.result.student');
+
+        return view('dashboard.classroom.quiz_result', compact('classroom'));
     }
 
     public function invite(Request $request)
@@ -131,6 +157,48 @@ class ClassroomController extends Controller
         Session::flash('success', 'Berhasil Menghapus Kelas');
 
         return route('classroom.index');
+    }
+
+    public function enrollView(Classroom $classroom)
+    {
+        abort_unless(\auth()->user()->role == 'mahasiswa',403);
+
+        $class = ClassStudent::where('user_id', \auth()->id())->where('classroom_id', $classroom['id'])->first();
+
+        if ($class) {
+            return redirect()->route('classroom.show', $classroom);
+        }
+
+        return view('dashboard.classroom.enroll', compact('classroom'));
+    }
+
+    public function enroll(Request $request, Classroom $classroom)
+    {
+        $this->validate($request, [
+            'enroll_code' => 'required'
+        ]);
+
+        abort_unless(\auth()->user()->role == 'mahasiswa',403);
+
+        $class = ClassStudent::where('user_id', \auth()->id())->where('classroom_id', $classroom['id'])->first();
+        if ($class) {
+            return redirect()->route('classroom.show', $classroom);
+        }
+
+        if ($classroom['enroll_code']) {
+            if ($request->get('enroll_code') !== $classroom['enroll_code']) {
+                Session::flash('error', 'Enroll Code Salah');
+            } else {
+                $classroom->students()->attach(\auth()->id());
+                Session::flash('success', 'Berhasil Bergabung Kelas');
+
+                return redirect()->route('classroom.show', $classroom);
+            }
+        }else {
+            Session::flash('error', 'Kelas ini tidak mengaktifkan enroll code');
+        }
+
+        return redirect()->back();
     }
 
 }

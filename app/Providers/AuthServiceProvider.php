@@ -34,6 +34,10 @@ class AuthServiceProvider extends ServiceProvider
                     if ($user['role'] == $ability)
                         return true;
                     return false;
+                } elseif ($user['role'] == 'mahasiswa') {
+                    if ($user['role'] == $ability)
+                        return true;
+                    return false;
                 } else {
                     return false;
                 }
