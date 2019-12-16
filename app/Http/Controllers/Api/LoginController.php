@@ -17,7 +17,7 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::whereEmail($validated['email'])->orWhereUsername($validated['email'])->first();
+        $user = User::where('email', $validated['email'])->orWhere('username', $validated['email'])->first();
 
         abort_unless($user && Hash::check($validated['password'], $user['password']), 422, __('Incorrect Email/Username or Passsword'));
 
