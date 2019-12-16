@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'username', 'picture',
+        'name', 'email', 'password', 'role', 'username', 'picture', 'api_token'
     ];
 
     /**
@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'api_token'
     ];
 
     protected $appends = ['avatar'];
@@ -60,7 +60,6 @@ class User extends Authenticatable
         $hash = md5(strtolower(trim($this['email']))) . '.jpeg' . '?s=106&d=mm&r=g';
         return "https://secure.gravatar.com/avatar/$hash";
     }
-
 
 
 }
