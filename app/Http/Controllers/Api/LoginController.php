@@ -21,14 +21,15 @@ class LoginController extends Controller
 
         abort_unless($user && Hash::check($validated['password'], $user['password']), 422, __('Incorrect Email/Username or Passsword'));
 
-        $user = $user->update([
-            'api_token' => hash('sha256', Str::random(60))
-        ]);
+        $token = hash('sha256', Str::random(60));
+        $user->forceFill([
+            'api_token' => $token
+        ])->save();
 
         return response()->json([
             'status' => 'success',
             'data' => [
-                'token' => $user['api_token']
+                'token' => $token
             ]
         ]);
     }
